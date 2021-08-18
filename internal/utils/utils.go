@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	route "ova_route_api/internal/models"
 )
 
 // SplitSlice - разделение на слайса на батчи - исходный слайс конвертировать в слайс слайсов -
@@ -31,11 +32,9 @@ func SplitSlice(array []string, batchSize uint) ([][]string, error) {
 
 // ReverseKey - происходит конвертация отображения (“ключ-значение“) в отображение (“значение-ключ“)
 func ReverseKey(m map[int]string) (map[string]int, error) {
-
 	resp := make(map[string]int)
 	for k, v := range m {
 		if _, ok := resp[v]; ok {
-
 			return nil, errors.New("key is duplicated")
 		}
 
@@ -63,4 +62,47 @@ func FilterSlice(slice []int, filter []int) ([]int, error) {
 	}
 
 	return res, nil
+}
+
+// SplitToBulks - батчевое разделение слайса на слайс слайсов
+func SplitToBulks(entities []route.Route, batchSize uint) ([][]route.Route, error) {
+	var (
+		resp [][]route.Route
+		i    uint
+	)
+
+	if batchSize == 0 {
+		return nil, errors.New("batchSize should be more than zero")
+	}
+
+	tmp := make([]route.Route, len(entities))
+	copy(tmp, entities)
+
+	arrLn := uint(len(tmp))
+	for i = 0; i < arrLn; i += batchSize {
+		if i+batchSize > arrLn {
+			resp = append(resp, tmp[i:arrLn])
+			break
+		}
+
+		resp = append(resp, tmp[i:i+batchSize])
+	}
+
+	return resp, nil
+}
+
+// ConvertToView - конвертации слайса от структуры в отображение, где ключ
+// идентификатор структуры, а значение сама структура
+func ConvertToView(entities []route.Route) (map[uint64]route.Route, error) {
+	if len(entities) == 0 {
+		return nil, errors.New("empty routes list")
+	}
+
+	resp := make(map[uint64]route.Route, len(entities))
+
+	for k, v := range entities {
+		resp[uint64(k)] = v
+	}
+
+	return resp, nil
 }
