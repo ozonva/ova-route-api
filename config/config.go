@@ -46,7 +46,6 @@ func watchConfig() {
 }
 
 func readConfig() {
-
 	file, err := os.Open("config.json")
 	if err != nil {
 		fmt.Println("err", err)

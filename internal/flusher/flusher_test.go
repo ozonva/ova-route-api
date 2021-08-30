@@ -2,14 +2,13 @@ package flusher_test
 
 import (
 	"errors"
+	"ova_route_api/internal/flusher"
+	"ova_route_api/internal/models"
+	"ova_route_api/internal/repository/mocks"
 
 	"github.com/golang/mock/gomock"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-
-	"ova_route_api/internal/flusher"
-	"ova_route_api/internal/models"
-	"ova_route_api/internal/repository/mocks"
 )
 
 var _ = Describe("Flusher", func() {
@@ -29,7 +28,6 @@ var _ = Describe("Flusher", func() {
 		ctrl = gomock.NewController(GinkgoT())
 		mockRepo = mocks.NewMockRepo(ctrl)
 		testFlusher = flusher.NewFlusher(3, mockRepo)
-
 	})
 
 	AfterEach(func() {
@@ -37,7 +35,6 @@ var _ = Describe("Flusher", func() {
 	})
 
 	Describe("Positive set", func() {
-
 		It("Single route", func() {
 			oneItem := routes[:1]
 			mockRepo.EXPECT().AddEntities(oneItem).Return(nil)
@@ -51,7 +48,6 @@ var _ = Describe("Flusher", func() {
 	})
 
 	Describe("Negative set", func() {
-
 		It("Should return last route", func() {
 			gomock.InOrder(
 				mockRepo.EXPECT().AddEntities(routes[:2]).Return(nil).Times(1),
