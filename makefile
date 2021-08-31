@@ -4,11 +4,12 @@ build:
 
 .PHONY: test
 test:
+	mockgen -source=internal/repository/repository.go -destination=internal/repository/mocks/repository_mock.go -package mocks
 	go test -v -race -timeout 30s ./...
 
 .PHONY: lint
 lint:
 	gofumpt -l -w .
-	golangci-lint run --fix
+	golangci-lint run --fix	
 	
 .DEFAULT_GOAL := build

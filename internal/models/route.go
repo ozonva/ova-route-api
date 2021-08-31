@@ -1,8 +1,8 @@
-package route
+package models
 
 import "errors"
 
-var id uint64
+var id uint64 // костылик, генерим уникальные id
 
 type Route struct {
 	ID        uint64  // Первичный ключь
