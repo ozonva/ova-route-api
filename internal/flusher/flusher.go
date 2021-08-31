@@ -25,7 +25,6 @@ type flusher struct {
 }
 
 func (f flusher) Flush(routes []models.Route) []models.Route {
-
 	var resp []models.Route
 
 	bulks, err := utils.SplitToBulks(routes, uint(f.chunkSize))
