@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package ova.route.api;
+
+// import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/ozonva/ova-route-api/pkg/ova-route-api";
+
+service Route{
+  rpc CreateRoute(CreateRouteRequest) returns (RouteResponse){};
+  rpc DescribeRoute(CreateRouteRequest) returns (RouteResponse){};
+  rpc ListRoutes(google.protobuf.Empty) returns (ListRoutesResponse){};
+  rpc RemoveRoute(CreateRouteRequest) returns (google.protobuf.Empty){};
+}
+
+message CreateRouteRequest{
+  uint64 UserID = 1;
+  string RouteName = 2;
+  float  Length = 3;
+}
+
+message ListRoutesResponse{
+  repeated RouteResponse Items = 1;
+}
+
+message RouteResponse{
+  uint64 ID = 1;
+  uint64 UserID = 2;
+  string RouteName = 3;
+  float Length = 4;
+}
