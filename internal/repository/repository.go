@@ -1,10 +1,11 @@
 package repository
 
-import "ova_route_api/internal/models"
+import "ova-route-api/internal/models"
 
 // Repo - интерфейс хранилища для сущности Entity
 type Repo interface {
-	AddEntities(entities []models.Route) error
-	ListEntities(limit, offset uint64) ([]models.Route, error)
-	DescribeEntity(entityId uint64) (*models.Route, error)
+	AddRoutes(routes []models.Route) error
+	DescribeRoute(route models.Route) (models.Route, error)
+	ListRoutes(limit, offset uint64) ([]models.Route, error)
+	RemoveRoute(routeID uint64) error
 }

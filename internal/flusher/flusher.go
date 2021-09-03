@@ -1,9 +1,9 @@
 package flusher
 
 import (
-	"ova_route_api/internal/models"
-	"ova_route_api/internal/repository"
-	"ova_route_api/internal/utils"
+	"ova-route-api/internal/models"
+	"ova-route-api/internal/repository"
+	"ova-route-api/internal/utils"
 )
 
 // Flusher - интерфейс для сброса задач в хранилище
@@ -34,7 +34,7 @@ func (f flusher) Flush(routes []models.Route) []models.Route {
 	}
 
 	for _, v := range bulks {
-		err = f.entityRepo.AddEntities(v)
+		err = f.entityRepo.AddRoutes(v)
 		if err != nil {
 			// handle error
 			resp = append(resp, v...)

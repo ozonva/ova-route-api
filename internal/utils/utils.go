@@ -2,7 +2,7 @@ package utils
 
 import (
 	"errors"
-	route "ova_route_api/internal/models"
+	route "ova-route-api/internal/models"
 )
 
 // SplitSlice - разделение на слайса на батчи - исходный слайс конвертировать в слайс слайсов -

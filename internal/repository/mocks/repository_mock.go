@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	models "ova_route_api/internal/models"
+	models "ova-route-api/internal/models"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -34,46 +34,60 @@ func (m *MockRepo) EXPECT() *MockRepoMockRecorder {
 	return m.recorder
 }
 
-// AddEntities mocks base method.
-func (m *MockRepo) AddEntities(entities []models.Route) error {
+// AddRoutes mocks base method.
+func (m *MockRepo) AddRoutes(routes []models.Route) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AddEntities", entities)
+	ret := m.ctrl.Call(m, "AddRoutes", routes)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// AddEntities indicates an expected call of AddEntities.
-func (mr *MockRepoMockRecorder) AddEntities(entities interface{}) *gomock.Call {
+// AddRoutes indicates an expected call of AddRoutes.
+func (mr *MockRepoMockRecorder) AddRoutes(routes interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddEntities", reflect.TypeOf((*MockRepo)(nil).AddEntities), entities)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddRoutes", reflect.TypeOf((*MockRepo)(nil).AddRoutes), routes)
 }
 
-// DescribeEntity mocks base method.
-func (m *MockRepo) DescribeEntity(entityId uint64) (*models.Route, error) {
+// DescribeRoute mocks base method.
+func (m *MockRepo) DescribeRoute(route models.Route) (models.Route, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DescribeEntity", entityId)
-	ret0, _ := ret[0].(*models.Route)
+	ret := m.ctrl.Call(m, "DescribeRoute", route)
+	ret0, _ := ret[0].(models.Route)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// DescribeEntity indicates an expected call of DescribeEntity.
-func (mr *MockRepoMockRecorder) DescribeEntity(entityId interface{}) *gomock.Call {
+// DescribeRoute indicates an expected call of DescribeRoute.
+func (mr *MockRepoMockRecorder) DescribeRoute(route interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DescribeEntity", reflect.TypeOf((*MockRepo)(nil).DescribeEntity), entityId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DescribeRoute", reflect.TypeOf((*MockRepo)(nil).DescribeRoute), route)
 }
 
-// ListEntities mocks base method.
-func (m *MockRepo) ListEntities(limit, offset uint64) ([]models.Route, error) {
+// ListRoutes mocks base method.
+func (m *MockRepo) ListRoutes(limit, offset uint64) ([]models.Route, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListEntities", limit, offset)
+	ret := m.ctrl.Call(m, "ListRoutes", limit, offset)
 	ret0, _ := ret[0].([]models.Route)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// ListEntities indicates an expected call of ListEntities.
-func (mr *MockRepoMockRecorder) ListEntities(limit, offset interface{}) *gomock.Call {
+// ListRoutes indicates an expected call of ListRoutes.
+func (mr *MockRepoMockRecorder) ListRoutes(limit, offset interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListEntities", reflect.TypeOf((*MockRepo)(nil).ListEntities), limit, offset)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListRoutes", reflect.TypeOf((*MockRepo)(nil).ListRoutes), limit, offset)
+}
+
+// RemoveRoute mocks base method.
+func (m *MockRepo) RemoveRoute(routeID uint64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RemoveRoute", routeID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// RemoveRoute indicates an expected call of RemoveRoute.
+func (mr *MockRepoMockRecorder) RemoveRoute(routeID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveRoute", reflect.TypeOf((*MockRepo)(nil).RemoveRoute), routeID)
 }

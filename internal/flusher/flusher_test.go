@@ -2,9 +2,9 @@ package flusher_test
 
 import (
 	"errors"
-	"ova_route_api/internal/flusher"
-	"ova_route_api/internal/models"
-	"ova_route_api/internal/repository/mocks"
+	"ova-route-api/internal/flusher"
+	"ova-route-api/internal/models"
+	"ova-route-api/internal/repository/mocks"
 
 	"github.com/golang/mock/gomock"
 	. "github.com/onsi/ginkgo"
@@ -37,12 +37,12 @@ var _ = Describe("Flusher", func() {
 	Describe("Positive set", func() {
 		It("Single route", func() {
 			oneItem := routes[:1]
-			mockRepo.EXPECT().AddEntities(oneItem).Return(nil)
+			mockRepo.EXPECT().AddRoutes(oneItem).Return(nil)
 			Expect(testFlusher.Flush(oneItem)).To(BeNil())
 		})
 
 		It("Multiple routes", func() {
-			mockRepo.EXPECT().AddEntities(routes).Return(nil).AnyTimes()
+			mockRepo.EXPECT().AddRoutes(routes).Return(nil).AnyTimes()
 			Expect(testFlusher.Flush(routes)).To(BeNil())
 		})
 	})
@@ -50,8 +50,8 @@ var _ = Describe("Flusher", func() {
 	Describe("Negative set", func() {
 		It("Should return last route", func() {
 			gomock.InOrder(
-				mockRepo.EXPECT().AddEntities(routes[:2]).Return(nil).Times(1),
-				mockRepo.EXPECT().AddEntities(routes[2:]).Return(errors.New("some error")).Times(1),
+				mockRepo.EXPECT().AddRoutes(routes[:2]).Return(nil).Times(1),
+				mockRepo.EXPECT().AddRoutes(routes[2:]).Return(errors.New("some error")).Times(1),
 			)
 			testFlusher = flusher.NewFlusher(2, mockRepo)
 			result := testFlusher.Flush(routes)

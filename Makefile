@@ -1,6 +1,6 @@
 .PHONY: build
 build:
-	go build -v -ldflags="-X 'ova_route_api/build.User=$(shell id -u -n)' -X 'ova_route_api/build.Time=$(shell date)'" ./cmd/ova-route-api
+	go build -v -ldflags="-X 'ova-route-api/build.User=$(shell id -u -n)' -X 'ova-route-api/build.Time=$(shell date)'" ./cmd/ova-route-api
 
 .PHONY: deps
 deps:
@@ -35,3 +35,8 @@ lint:
 	golangci-lint run --fix	
 	
 .DEFAULT_GOAL := build
+
+.PHONY: migrate
+migrate:
+	goose -dir "./migration/" postgres "postgres://ozon_user:secret@localhost:49154/ozon?sslmode=disable" up 
+	goose -dir "./migration/" postgres "postgres://ozon_user:secret@localhost:49154/ozon?sslmode=disable" status

@@ -1,8 +1,8 @@
 package saver
 
 import (
-	"ova_route_api/internal/flusher"
-	"ova_route_api/internal/models"
+	"ova-route-api/internal/flusher"
+	"ova-route-api/internal/models"
 	"sync"
 	"time"
 )
@@ -17,6 +17,7 @@ type Saver interface {
 // NewSaver возвращает Saver с поддержкой переодического сохранения
 func NewSaver(capacity uint, flusher flusher.Flusher) Saver {
 	s := &saver{
+		Mutex:   &sync.Mutex{},
 		flusher: flusher,
 		cap:     capacity,
 		buff:    make([]models.Route, 0),
@@ -26,7 +27,7 @@ func NewSaver(capacity uint, flusher flusher.Flusher) Saver {
 }
 
 type saver struct {
-	sync.Mutex
+	*sync.Mutex
 	once    sync.Once
 	flusher flusher.Flusher
 	cap     uint
