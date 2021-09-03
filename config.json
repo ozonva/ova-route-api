@@ -1,4 +1,3 @@
 {
-    "users": ["UserA","UserB"],
-    "groups": ["GroupA"]
+    "GRPC_ADR": "0.0.0.0:8082"
 }

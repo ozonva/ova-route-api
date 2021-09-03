@@ -9,17 +9,16 @@ import (
 )
 
 type configuration struct {
-	Users  []string `json:"users"`
-	Groups []string `json:"groups"`
+	GRPCAdr string `json:"GRPC_ADR"`
 }
 
 type safeConfiguratin struct {
 	configuration
-	sync.Mutex
+	*sync.Mutex
 }
 
 var (
-	conf safeConfiguratin
+	conf = safeConfiguratin{Mutex: &sync.Mutex{}}
 	once sync.Once
 )
 
@@ -56,10 +55,8 @@ func readConfig() {
 	defer conf.Unlock()
 
 	decoder := json.NewDecoder(file)
-	// conf := configuration{}
 	err = decoder.Decode(&conf)
 	if err != nil {
 		fmt.Println("error:", err)
 	}
-	fmt.Printf("Прочитан конфиг. Users: %v, Groups: %v", conf.Users, conf.Groups)
 }

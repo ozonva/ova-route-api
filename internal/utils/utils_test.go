@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	route "ova_route_api/internal/models"
+	route "ova-route-api/internal/models"
 	"reflect"
 	"testing"
 

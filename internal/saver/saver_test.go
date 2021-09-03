@@ -1,10 +1,10 @@
 package saver_test
 
 import (
-	"ova_route_api/internal/flusher"
-	"ova_route_api/internal/models"
-	"ova_route_api/internal/repository/mocks"
-	"ova_route_api/internal/saver"
+	"ova-route-api/internal/flusher"
+	"ova-route-api/internal/models"
+	"ova-route-api/internal/repository/mocks"
+	"ova-route-api/internal/saver"
 	"time"
 
 	"github.com/golang/mock/gomock"
@@ -40,9 +40,9 @@ var _ = Describe("Flusher", func() {
 	Describe("Positive set", func() {
 		It("Flush by timeout", func() {
 			gomock.InOrder(
-				mockRepo.EXPECT().AddEntities(routes[:1]).Return(nil).Times(1),
-				mockRepo.EXPECT().AddEntities(routes[1:2]).Return(nil).Times(1),
-				mockRepo.EXPECT().AddEntities(routes[2:3]).Return(nil).Times(1),
+				mockRepo.EXPECT().AddRoutes(routes[:1]).Return(nil).Times(1),
+				mockRepo.EXPECT().AddRoutes(routes[1:2]).Return(nil).Times(1),
+				mockRepo.EXPECT().AddRoutes(routes[2:3]).Return(nil).Times(1),
 			)
 			for _, route := range routes {
 				testSaver.Save(route)
@@ -55,9 +55,9 @@ var _ = Describe("Flusher", func() {
 
 		It("Flush by call Close", func() {
 			gomock.InOrder(
-				mockRepo.EXPECT().AddEntities(routes[:1]).Return(nil).Times(1),
-				mockRepo.EXPECT().AddEntities(routes[1:2]).Return(nil).Times(1),
-				mockRepo.EXPECT().AddEntities(routes[2:3]).Return(nil).Times(1),
+				mockRepo.EXPECT().AddRoutes(routes[:1]).Return(nil).Times(1),
+				mockRepo.EXPECT().AddRoutes(routes[1:2]).Return(nil).Times(1),
+				mockRepo.EXPECT().AddRoutes(routes[2:3]).Return(nil).Times(1),
 			)
 			for _, route := range routes {
 				testSaver.Save(route)
