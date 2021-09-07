@@ -34,6 +34,21 @@ func (m *MockRepo) EXPECT() *MockRepoMockRecorder {
 	return m.recorder
 }
 
+// AddRoute mocks base method.
+func (m *MockRepo) AddRoute(route models.Route) (models.Route, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddRoute", route)
+	ret0, _ := ret[0].(models.Route)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// AddRoute indicates an expected call of AddRoute.
+func (mr *MockRepoMockRecorder) AddRoute(route interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddRoute", reflect.TypeOf((*MockRepo)(nil).AddRoute), route)
+}
+
 // AddRoutes mocks base method.
 func (m *MockRepo) AddRoutes(routes []models.Route) error {
 	m.ctrl.T.Helper()

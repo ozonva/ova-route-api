@@ -1,6 +1,7 @@
 package saver_test
 
 import (
+	"context"
 	"ova-route-api/internal/flusher"
 	"ova-route-api/internal/models"
 	"ova-route-api/internal/repository/mocks"
@@ -45,7 +46,7 @@ var _ = Describe("Flusher", func() {
 				mockRepo.EXPECT().AddRoutes(routes[2:3]).Return(nil).Times(1),
 			)
 			for _, route := range routes {
-				testSaver.Save(route)
+				testSaver.Save(context.Background(), route)
 			}
 
 			Expect(testSaver.BuffSize()).Should(BeNumerically("==", 1))
@@ -60,11 +61,11 @@ var _ = Describe("Flusher", func() {
 				mockRepo.EXPECT().AddRoutes(routes[2:3]).Return(nil).Times(1),
 			)
 			for _, route := range routes {
-				testSaver.Save(route)
+				testSaver.Save(context.Background(), route)
 			}
 
 			Expect(testSaver.BuffSize()).Should(BeNumerically("==", 1))
-			testSaver.Close()
+			testSaver.Close(context.Background())
 			Expect(testSaver.BuffSize()).Should(BeNumerically("==", 0))
 		})
 	})

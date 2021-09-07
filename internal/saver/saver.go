@@ -1,6 +1,7 @@
 package saver
 
 import (
+	"context"
 	"ova-route-api/internal/flusher"
 	"ova-route-api/internal/models"
 	"sync"
@@ -8,9 +9,9 @@ import (
 )
 
 type Saver interface {
-	Save(entity models.Route) // заменить на свою сущность
+	Save(ctx context.Context, route models.Route) // заменить на свою сущность
 	// Init()
-	Close()
+	Close(ctx context.Context)
 	BuffSize() uint
 }
 
@@ -41,7 +42,7 @@ func (s *saver) BuffSize() uint {
 	return uint(len(s.buff))
 }
 
-func (s *saver) Save(route models.Route) {
+func (s *saver) Save(ctx context.Context, route models.Route) {
 	// Стартанули автоматический сброс по таймеру
 	s.once.Do(func() {
 		go func(s *saver) {
@@ -50,14 +51,14 @@ func (s *saver) Save(route models.Route) {
 
 			for {
 				<-ticker.C
-				s.flush()
+				s.flush(ctx)
 			}
 		}(s)
 	})
 
 	// Если достигли максимальной емкости
 	if len(s.buff) == int(s.cap) {
-		s.flush()
+		s.flush(ctx)
 	}
 
 	s.Lock()
@@ -65,13 +66,13 @@ func (s *saver) Save(route models.Route) {
 	s.buff = append(s.buff, route)
 }
 
-func (s *saver) Close() {
-	s.flush()
+func (s *saver) Close(ctx context.Context) {
+	s.flush(ctx)
 }
 
-func (s *saver) flush() {
+func (s *saver) flush(ctx context.Context) {
 	s.Lock()
 	defer s.Unlock()
 
-	s.buff = s.flusher.Flush(s.buff)
+	s.buff = s.flusher.Flush(ctx, s.buff)
 }

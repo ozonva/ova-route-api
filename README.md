@@ -1,4 +1,4 @@
-# ova_route_api
+# ova-route-api
 
 protoc --proto_path=. -I vendor.protogen \
 	--go_out=pkg/api --go_opt=paths=import \

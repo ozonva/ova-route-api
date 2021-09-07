@@ -17,7 +17,8 @@ type repository struct {
 }
 
 func New(logger zerolog.Logger) repository {
-	dsn := "postgres://ozon_user:secret@localhost:49154/ozon?sslmode=disable"
+	// TODO вынсти в конфиг
+	dsn := "postgres://ozon_user:secret@localhost:49153/ozon?sslmode=disable"
 	// dsn := fmt.Sprintf("user=ozon_user dbname=ozon sslmode=disable password=secret port=49154",
 	// "ozon_user", )
 	db, err := sql.Open("pgx", dsn)
@@ -44,6 +45,17 @@ func New(logger zerolog.Logger) repository {
 	}
 }
 
+func (repo repository) AddRoute(route models.Route) (models.Route, error) {
+	query := "INSERT INTO routes (user_id, route_name, length) VALUES ($1, $2, $3) RETURNING id"
+	err := repo.db.QueryRow(query, route.UserID, route.RouteName, route.Length).Scan(&route.ID)
+	if err != nil {
+		repo.logger.Error().Msgf("err create route: %v", err)
+		return models.Route{}, err
+	}
+
+	return route, nil
+}
+
 func (repo repository) AddRoutes(routes []models.Route) error {
 	ctx := context.TODO()
 	conn, err := repo.db.Conn(ctx)
@@ -53,7 +65,6 @@ func (repo repository) AddRoutes(routes []models.Route) error {
 	}
 	defer conn.Close()
 
-	// stmt, err := conn.Prepare("INSERT INTO routes (user_id, route_name, length) VALUES ($1, $2, $3)")
 	stmt, err := conn.PrepareContext(ctx, "INSERT INTO routes (user_id, route_name, length) VALUES ($1, $2, $3)")
 	if err != nil {
 		repo.logger.Error().Msgf("err prepare request: %v", err)
@@ -75,7 +86,7 @@ func (repo repository) AddRoutes(routes []models.Route) error {
 func (repo repository) DescribeRoute(route models.Route) (models.Route, error) {
 	query := "UPDATE routes SET user_id = $1, route_name = $2, length = $3"
 	// _, err := db.ExecContext(ctx, query, , "new year", "watch")
-	repo.logger.Error().Msgf("UserID: %v, RouteName: %v, Length: %v", route.UserID, route.RouteName, route.Length)
+	// repo.logger.Error().Msgf("UserID: %v, RouteName: %v, Length: %v", route.UserID, route.RouteName, route.Length)
 	_, err := repo.db.Exec(query, route.UserID, route.RouteName, route.Length)
 	if err != nil {
 		repo.logger.Error().Msgf("err update route: %v", err)

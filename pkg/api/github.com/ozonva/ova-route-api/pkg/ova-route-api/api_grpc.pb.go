@@ -4,7 +4,6 @@ package ovarouteapi
 
 import (
 	context "context"
-
 	empty "github.com/golang/protobuf/ptypes/empty"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
@@ -21,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RouteClient interface {
 	CreateRoute(ctx context.Context, in *CreateRouteRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	MultiCreateRoute(ctx context.Context, in *MultiCreateRouteRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	DescribeRoute(ctx context.Context, in *DescribeRouteRequest, opts ...grpc.CallOption) (*RouteResponse, error)
 	ListRoutes(ctx context.Context, in *ListRoutesRequest, opts ...grpc.CallOption) (*ListRoutesResponse, error)
 	RemoveRoute(ctx context.Context, in *RemoveRouteRequest, opts ...grpc.CallOption) (*empty.Empty, error)
@@ -37,6 +37,15 @@ func NewRouteClient(cc grpc.ClientConnInterface) RouteClient {
 func (c *routeClient) CreateRoute(ctx context.Context, in *CreateRouteRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
 	out := new(empty.Empty)
 	err := c.cc.Invoke(ctx, "/ova.route.api.Route/CreateRoute", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *routeClient) MultiCreateRoute(ctx context.Context, in *MultiCreateRouteRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/ova.route.api.Route/MultiCreateRoute", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -75,6 +84,7 @@ func (c *routeClient) RemoveRoute(ctx context.Context, in *RemoveRouteRequest, o
 // for forward compatibility
 type RouteServer interface {
 	CreateRoute(context.Context, *CreateRouteRequest) (*empty.Empty, error)
+	MultiCreateRoute(context.Context, *MultiCreateRouteRequest) (*empty.Empty, error)
 	DescribeRoute(context.Context, *DescribeRouteRequest) (*RouteResponse, error)
 	ListRoutes(context.Context, *ListRoutesRequest) (*ListRoutesResponse, error)
 	RemoveRoute(context.Context, *RemoveRouteRequest) (*empty.Empty, error)
@@ -82,20 +92,21 @@ type RouteServer interface {
 }
 
 // UnimplementedRouteServer must be embedded to have forward compatible implementations.
-type UnimplementedRouteServer struct{}
+type UnimplementedRouteServer struct {
+}
 
 func (UnimplementedRouteServer) CreateRoute(context.Context, *CreateRouteRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRoute not implemented")
 }
-
+func (UnimplementedRouteServer) MultiCreateRoute(context.Context, *MultiCreateRouteRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MultiCreateRoute not implemented")
+}
 func (UnimplementedRouteServer) DescribeRoute(context.Context, *DescribeRouteRequest) (*RouteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DescribeRoute not implemented")
 }
-
 func (UnimplementedRouteServer) ListRoutes(context.Context, *ListRoutesRequest) (*ListRoutesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListRoutes not implemented")
 }
-
 func (UnimplementedRouteServer) RemoveRoute(context.Context, *RemoveRouteRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveRoute not implemented")
 }
@@ -126,6 +137,24 @@ func _Route_CreateRoute_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(RouteServer).CreateRoute(ctx, req.(*CreateRouteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Route_MultiCreateRoute_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MultiCreateRouteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RouteServer).MultiCreateRoute(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ova.route.api.Route/MultiCreateRoute",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RouteServer).MultiCreateRoute(ctx, req.(*MultiCreateRouteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -194,6 +223,10 @@ var Route_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateRoute",
 			Handler:    _Route_CreateRoute_Handler,
+		},
+		{
+			MethodName: "MultiCreateRoute",
+			Handler:    _Route_MultiCreateRoute_Handler,
 		},
 		{
 			MethodName: "DescribeRoute",
