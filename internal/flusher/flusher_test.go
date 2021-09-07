@@ -1,6 +1,7 @@
 package flusher_test
 
 import (
+	"context"
 	"errors"
 	"ova-route-api/internal/flusher"
 	"ova-route-api/internal/models"
@@ -38,12 +39,12 @@ var _ = Describe("Flusher", func() {
 		It("Single route", func() {
 			oneItem := routes[:1]
 			mockRepo.EXPECT().AddRoutes(oneItem).Return(nil)
-			Expect(testFlusher.Flush(oneItem)).To(BeNil())
+			Expect(testFlusher.Flush(context.Background(), oneItem)).To(BeNil())
 		})
 
 		It("Multiple routes", func() {
 			mockRepo.EXPECT().AddRoutes(routes).Return(nil).AnyTimes()
-			Expect(testFlusher.Flush(routes)).To(BeNil())
+			Expect(testFlusher.Flush(context.Background(), routes)).To(BeNil())
 		})
 	})
 
@@ -54,7 +55,7 @@ var _ = Describe("Flusher", func() {
 				mockRepo.EXPECT().AddRoutes(routes[2:]).Return(errors.New("some error")).Times(1),
 			)
 			testFlusher = flusher.NewFlusher(2, mockRepo)
-			result := testFlusher.Flush(routes)
+			result := testFlusher.Flush(context.Background(), routes)
 			Expect(len(result)).Should(BeNumerically("==", 1))
 		})
 	})

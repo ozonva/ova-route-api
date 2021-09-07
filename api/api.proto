@@ -10,6 +10,7 @@ option go_package = "github.com/ozonva/ova-route-api/pkg/ova-route-api;ovaroutea
 
 service Route{
   rpc CreateRoute(CreateRouteRequest) returns (google.protobuf.Empty){};
+  rpc MultiCreateRoute(MultiCreateRouteRequest) returns (google.protobuf.Empty);
   rpc DescribeRoute(DescribeRouteRequest) returns (RouteResponse){};
   rpc ListRoutes(ListRoutesRequest) returns (ListRoutesResponse){};
   rpc RemoveRoute(RemoveRouteRequest) returns (google.protobuf.Empty){};
@@ -19,7 +20,11 @@ message CreateRouteRequest{
   uint64 UserID = 1;
   string RouteName = 2;
   double Length = 3;
-} 
+}
+
+message MultiCreateRouteRequest{
+  repeated CreateRouteRequest Items = 1;
+}
 
 message DescribeRouteRequest{
   uint64 UserID = 1;

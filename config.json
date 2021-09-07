@@ -1,3 +1,6 @@
 {
-    "GRPC_ADR": "0.0.0.0:8082"
+    "METRIK_ADDR": "0.0.0.0:8081",
+    "GRPC_ADDR": "0.0.0.0:8082",
+    "KAFKA_ADDRESS": "0.0.0.0:9092",
+    "KAFKA_TOPIC": "message-log"
 }

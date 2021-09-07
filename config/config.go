@@ -9,7 +9,10 @@ import (
 )
 
 type configuration struct {
-	GRPCAdr string `json:"GRPC_ADR"`
+	MetrikAddr   string `json:"METRIK_ADDR"`
+	GRPCAddr     string `json:"GRPC_ADDR"`
+	KafkaAdDress string `json:"KAFKA_ADDRESS"`
+	KafkaTopic   string `json:"KAFKA_TOPIC"`
 }
 
 type safeConfiguratin struct {
